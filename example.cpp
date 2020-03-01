@@ -18,6 +18,8 @@ int main(int argc, char **argv) {
                ? argv[1]
                : PROTOCOL + "//" + HOSTNAME + ":" + PORT + PATH;
 
+    cout << "Connecting to " << url << endl;
+
     SimpleHttpRequest request;
     request.timeout = 5000;
     request.get(url)
@@ -28,7 +30,7 @@ int main(int argc, char **argv) {
       cout << res.str();
     }).end();
   } catch(const std::exception &e) {
-    cerr << "exception catched : " << e.what() << endl ;
+    cerr << "Exception caught : " << e.what() << endl ;
   }
 
   return 0;

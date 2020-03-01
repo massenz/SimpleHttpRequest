@@ -95,67 +95,63 @@ return uv_run(uv_loop, UV_RUN_DEFAULT);
 
 
 ## build & test
-### git clone with submodules.
-```bash
-git clone --recursive https://github.com/ivere27/SimpleHttpRequest.git
-cd SimpleHttpRequest
-cd http-parser && make
-cd ..
-cd libuv && ./autogen.sh && ./configure && make
-cd ..
-# cd openssl && ./config && make
-```
 
 ### Using CMake & Conan package
 
-By uncommenting the lines in `CMakeLists.txt` as indicated, instead of having
-to build OpenSSL "in place," we can use Conan package manager.
-
 See [conan.io](http://conan.io) for more details; the TL;dr is `pip install conan`.
 
-```bash
-# Create the .so library for http-parser:
-cd http-parser && make library
-ln -s libhttp_parser.so.2.7.1 libhttp_parser.so
+The easiest way is to just use the `build.sh` script; however, the build can be also run manually via:
 
-# Build the package dependencies; currently just OpenSSL
-mkdir .conan && cd .conan
+```bash
+mkdir build && cd build
 conan install .. -s compiler=clang -s compiler.version=4.0 \
     -s compiler.libcxx=libstdc++11 --build=missing
 
-# Build the example binary.
-mkdir build && cd build
 cmake .. && cmake --build .
+```
+
+#### Building `node-gyp`
+
+For reasons that are not entirely clear, when building `http-parser`, it requires the `node-gyp` library, and this will fail with [a cryptic error](https://github.com/nodejs/node-gyp/issues/569):
+
+
+```
+xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory '/Library/Developer/CommandLineTools' is a command line tools instance
+```
+
+The solution is to execute:
+
+`sudo xcode-select -s /Applications/Xcode.app/Contents/Developer`
+
+and once the build is complete, reset the value to:
+
+`sudo xcode-select -s /Library/Developer/CommandLineTools`
+
+otherwise, building sources will fail with errors such as:
+
+```
+/Library/Developer/CommandLineTools/usr/include/c++/v1/wchar.h:137:77: error: use of undeclared identifier
+      'wcschr'
+wchar_t* __libcpp_wcschr(const wchar_t* __s, wchar_t __c) {return (wchar_t*)wcschr(__s, __c);}
 ```
 
 `TODO: install step in CMake & detailed instruction how to use this in a C++ project`
 
-### example.cpp - http
-```bash
-$ make
-```
 ### example.cpp - https
+
 ENABLE_SSL macro (about 2.5MB will be added or $ strip a.out )
+
 ```bash
 $ g++ example.cpp --std=c++11 \
--I./http-parser/ -I./libuv/include/ -I./openssl/include/ \
-./libuv/.libs/libuv.a \
-./http-parser/http_parser.o \
-./openssl/libssl.a ./openssl/libcrypto.a \
--lpthread -ldl \
--DENABLE_SSL \
-&& DEBUG=* ./a.out https://www.google.com
+  -I./http-parser/ -I./libuv/include/ -I./openssl/include/ \
+  ./libuv/.libs/libuv.a \
+  ./http-parser/http_parser.o \
+  ./openssl/libssl.a ./openssl/libcrypto.a \
+  -lpthread -ldl \
+  -DENABLE_SSL \
+  && DEBUG=* ./a.out https://www.google.com
 ```
 
-## about
-* `This is experimental yet. use at your own purpose!`
-* binary test
-```bash
-$ ./a.out http://www.google.com/images/nav_logo242.png > a.png
-$ file a.png
-a.png: PNG image data, 167 x 410, 8-bit/color RGBA, non-interlaced
-```
-* a project of 'Second Compiler'.
 
 # License
 

@@ -8,7 +8,10 @@
 
 
 [requires]
-OpenSSL/1.0.2j@lasote/stable
+# TODO: use `openssl/1.1.1d` instead
+OpenSSL/1.0.2@conan/stable
+libuv/1.31.0@bincrafters/stable
+http_parser/2.9.2
 
 [generators]
 cmake
