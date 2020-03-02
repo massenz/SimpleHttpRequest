@@ -2,16 +2,28 @@
 # Created by M. Massenzio
 #
 # See the README for more information or http://conan.io
-#
-#   $ conan install .. -s compiler=clang -s compiler.version=4.0 \
-#      -s compiler.libcxx=libstdc++11 --build=missing
-
 
 [requires]
-# TODO: use `openssl/1.1.1d` instead
-OpenSSL/1.0.2@conan/stable
+openssl/1.1.1d
 libuv/1.31.0@bincrafters/stable
 http_parser/2.9.2
 
+[options]
+libuv:shared=True
+openssl:shared=True
+http_parser:shared=True
+
 [generators]
 cmake
+
+[imports]
+#
+# Copies all shared libraries (*.so, *.dylib) files from packages lib
+# folder to the "lib" folder, and headers to "include".
+#
+# This is useful for the `install` step to move them to $INSTALL_DIR
+# if defined.
+#
+lib, *.dylib* -> ./lib
+lib, *.so* -> ./lib
+include, * -> ./include
