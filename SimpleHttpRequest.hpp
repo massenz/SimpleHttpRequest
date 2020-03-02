@@ -1,9 +1,11 @@
-#ifndef SIMPLE_HTTP_REQUEST_H_
-#define SIMPLE_HTTP_REQUEST_H_
+#pragma once
 
-#define SIMPLE_HTTP_REQUEST_VERSION_MAJOR 0
-#define SIMPLE_HTTP_REQUEST_VERSION_MINOR 1
-#define SIMPLE_HTTP_REQUEST_VERSION_PATCH 0
+#define SIMPLE_HTTP_REQUEST_VERSION_MAJOR  @RELEASE_MAJOR@
+#define SIMPLE_HTTP_REQUEST_VERSION_MINOR  @RELEASE_MINOR@
+#define SIMPLE_HTTP_REQUEST_VERSION_PATCH  @RELEASE_PATCH@
+
+#define SIMPLE_HTTP_REQUEST_BUILD_ID  @BUILD_ID@
+#define SIMPLE_HTTP_REQUEST_VERSION  @RELEASE_STRING@
 
 #include <algorithm>
 #include <cassert>
@@ -28,7 +30,7 @@ namespace request {
 using namespace std;
 
 #ifndef ULLONG_MAX
-# define ULLONG_MAX ((uint64_t) -1) /* 2^64-1 */
+#define ULLONG_MAX ((uint64_t) -1) /* 2^64-1 */
 #endif
 
 #if defined(NDEBUG)
@@ -37,7 +39,7 @@ using namespace std;
 # define ASSERT(exp)  assert(exp)
 #endif
 
-// FIXME : to stderr with __LINE__, __PRETTY_FUNCTION__ ?
+// FIXME: to stderr with __LINE__, __PRETTY_FUNCTION__ ?
 #define LOGE(...) LOGI(__VA_ARGS__)
 void _LOGI(){}
 template <typename T, typename ...Args>
@@ -672,5 +674,3 @@ class SimpleHttpRequest {
 };
 
 } // namespace request
-
-#endif // SIMPLE_HTTP_REQUEST_H_
