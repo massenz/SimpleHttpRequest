@@ -82,3 +82,14 @@ add_executable(example
     ${SRC}/example.cpp
 )
 target_link_libraries(example ${LIBS})
+
+# The same example, with SSL enabled.
+#
+add_executable(example_with_ssl
+    ${SRC}/example.cpp
+)
+target_link_libraries(example_with_ssl
+    ${LIBS}
+    ssl
+)
+target_compile_definitions(example_with_ssl PUBLIC ENABLE_SSL)

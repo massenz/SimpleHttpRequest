@@ -133,20 +133,22 @@ wchar_t* __libcpp_wcschr(const wchar_t* __s, wchar_t __c) {return (wchar_t*)wcsc
 ```
 
 
-### example.cpp - https
+### https support
 
-ENABLE_SSL macro (about 2.5MB will be added or $ strip a.out )
+Use the ENABLE_SSL macro (about 2.5MB will be added or `$ strip a.out`) during the compilation step; this could be done like this:
 
 ```bash
 $ g++ example.cpp --std=c++11 \
-  -I./http-parser/ -I./libuv/include/ -I./openssl/include/ \
-  ./libuv/.libs/libuv.a \
-  ./http-parser/http_parser.o \
-  ./openssl/libssl.a ./openssl/libcrypto.a \
-  -lpthread -ldl \
+  -I${INSTALL_DIR}/include/ \
+  -L ${INSTALL_DIR}/lib/ \
+  -lpthread -ldl -lssl -luv -lcrypto -lhttp_parser \
   -DENABLE_SSL \
   && DEBUG=* ./a.out https://www.google.com
 ```
+
+or via CMake:
+
+    target_compile_definitions(example_with_ssl PUBLIC ENABLE_SSL)
 
 
 # License
