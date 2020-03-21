@@ -18,6 +18,7 @@ gen/
 build/
 Debug/
 .conan/
+.idea/
 
 # Compiler intermediate files
 *.o
